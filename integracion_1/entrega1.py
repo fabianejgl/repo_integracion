@@ -1,55 +1,62 @@
 #Mantuve del ej 6 que Persona podía inicializarse con datos vacíos, sino borarr los =
 class Persona:
     def __init__(self, nombre="NN", edad=0):
-        self._nombre = nombre
-        self._edad = edad
+        self.__nombre = nombre
+        self.__edad = edad
 
     @property
     def nombre(self):
-        return self._nombre
+        return self.__nombre
 
     @nombre.setter
     def nombre(self, value):
-        self._nombre = value
+        self.__nombre = value
 
     @property
     def edad(self):
-        return self._edad
+        return self.__edad
 
     @edad.setter
     def edad(self, value):
-        self._edad = value
+        self.__edad = value
+
+    def __str__(self) -> str:
+        return f"La persona es {self.__nombre} de {self.__edad} de edad"
+    
+    def mostrar(self):
+        print(f"La persona es {self.__nombre}")
+        print(f"Edad: {self.edad}")
 
 
 
 class Cuenta:
-    def __init__(self, titular, cantidad = 0) -> None:
-        self._titular = titular
-        self._cantidad = cantidad
+    def __init__(self, titular:Persona, cantidad = 0) -> None: #:Persona agregado
+        self.__titular = titular
+        self.__cantidad = cantidad
 
     @property
     def titular(self):
-        return self._titular
+        return self.__titular
     
-    # @titular.setter                               #NO es necesario si uso setter de Persona
-    # def titular(self, nuevo_nombre):
-    #     self._titular = nuevo_nombre
+    @titular.setter                               #NO es necesario si uso setter de Persona? Preguntar
+    def titular(self, titular_nuevo):
+         self._titular = titular_nuevo
     
     @property
     def cantidad(self):
-        return self._cantidad
+        return self.__cantidad
     
     def mostrar(self):
-        print(f"El titular de la cuenta es {self._titular.nombre}")
-        print(f"Edad: {self._titular.edad}")
-        print(f"Saldo en cuenta: {self._cantidad}")
+        print(f"El titular de la cuenta es {self.__titular.mostrar()}")
+        print(f"Edad: {self.__titular.edad}")
+        print(f"Saldo en cuenta: {self.__cantidad}")
     
     def ingresar(self, dinero):
         if dinero > 0:
-            self._cantidad += dinero
+            self.__cantidad += dinero
     
     def retirar(self, dinero):
-        self._cantidad -= dinero
+        self.__cantidad -= dinero
 
 # persona1 = Persona("Fabian", 22)
 # cuenta1 = Cuenta(persona1)
@@ -64,17 +71,19 @@ class Cuenta:
 
     #------7------
 class CuentaJoven(Cuenta):
-    def __init__(self, titular, cantidad=0, bonificacion = 0):
+    def __init__(self, titular, cantidad:float=0, bonificacion = 0):
         super().__init__(titular, cantidad)
-        self._bonificacion = bonificacion
+        self.__bonificacion = bonificacion
 
     @property
     def bonificacion(self):
-        return self._bonificacion
+        return self.__bonificacion
     
     @bonificacion.setter
     def bonificacion(self, nueva_bonif):
-        self._bonificacion = nueva_bonif
+        if nueva_bonif < 0:
+            raise ValueError("La bonificación debe ser positiva")
+        self.__bonificacion = nueva_bonif
 
     def es_titular_valido(self):
         return self.titular.edad >= 25
@@ -89,7 +98,7 @@ class CuentaJoven(Cuenta):
     def mostrar(self):
         print("Cuenta Joven")
         super().mostrar()
-        print(f"La bonificación es de {self._bonificacion}%")
+        print(f"La bonificación es de {self.__bonificacion}%")
 
 
 
@@ -108,6 +117,7 @@ cuenta2.titular.edad = 25
 cuenta2.ingresar(10)
 cuenta2.mostrar()
 print("")
+print(cuenta2.titular)
 
 cuenta2.retirar(20)
 print("")
